@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "easy-translate",
+  "version": "0.1",
+  "description": "translate in current page",
+  "author": "bibidu",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "translate"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
