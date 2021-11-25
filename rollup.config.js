@@ -5,9 +5,12 @@ import progress from "rollup-plugin-progress";
 import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import copy from "rollup-plugin-copy";
+import alias from "@rollup/plugin-alias";
+import replace from "@rollup/plugin-replace";
 
 const production = process.env.NODE_ENV === "production";
 export default {
+  extensions: [".ts", ".js", ".tsx"],
   input: "src/contentScript.tsx",
   output: [
     {
@@ -24,10 +27,19 @@ export default {
         { src: "src/icon.png", dest: "dist/" },
       ],
     }),
+    replace({
+      preventAssignment: true,
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+    }),
+    alias({
+      entries: [{ find: "@", replacement: "./src" }],
+    }),
     postcss({
       extensions: [".css"],
     }),
-    nodeResolve(),
+    nodeResolve({
+      preferBuiltins: false,
+    }),
     commonjs(),
     babel({
       extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],

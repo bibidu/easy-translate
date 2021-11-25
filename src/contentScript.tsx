@@ -1,34 +1,17 @@
 import { createSignal, onMount } from "solid-js";
 import { render } from "solid-js/web";
-import './index.css'
+import { translate } from './utils/translate.ts';
 
-const API_KEY = 'AIzaSyB1KA8ILwBfyQSPqyPA-R8oWVx4j8UV6iY'
+import './index.css';
 
 const getLanguage = (value) => {
   return /[a-zA-Z\s]+/.test(value) ? {
-    source: 'en',
-    target: 'zh-CN'
+    from: 'en',
+    to: 'zh'
   } : {
-      target: 'en',
-      source: 'zh-CN'
+      from: 'zh',
+      to: 'en'
     }
-}
-
-// https://script.google.com/macros/s/AKfycbyhDbCo1ZjaGJ1XT1xQOwoHtW7FE6QDK-LoSDe19K__SW7adBA/exec?text=${encodeURIComponent(value)}&source=en&target=zh-CN
-const translate = async (value) => {
-  try {
-    const res = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        q: value,
-        ...getLanguage(value),
-      })
-    })
-    const { data } = await res.json()
-    return data.translations[0].translatedText
-  } catch (error) {
-    return ''
-  }
 }
 
 const App = () => {
@@ -60,7 +43,8 @@ const App = () => {
     setLoading(true)
     clearTimeout(translateTimer)
     translateTimer = setTimeout(async () => {
-      const result = await translate(value)
+      const { from, to } = getLanguage(value)
+      const result = await translate(value, from, to)
       setLoading(false)
       setTransResult(result)
     }, 300)
@@ -81,18 +65,18 @@ const App = () => {
 
   const showWithFocused = () => {
     setContainerVisible(true)
-    inputElement.focus()
+    inputElement?.focus()
   }
 
   onMount(() => {
-    inputElement.focus()
+    inputElement?.focus()
     document.addEventListener('keydown', ({ metaKey, keyCode }) => {
       const isPressCommand = metaKey
       const isPressSemicolon = keyCode === 186
       if (isPressCommand && isPressSemicolon) {
         const next = !containerVisible()
         if (next) {
-          inputElement.focus()
+          inputElement?.focus()
         }
         setContainerVisible(next)
       }
@@ -104,6 +88,7 @@ const App = () => {
       {!containerVisible() && <div onClick={showWithFocused} class="tp_side-btn">译</div>}
       <div classList={{ 'tp_full-container': true, ['tp_container-visible']: containerVisible() }} onClick={onOuterContainerTap}>
         <div class="tp_container" ref={container}>
+          {/* <iframe src="https://www.iciba.com" /> */}
           <div onClick={onInnerContainerTap} class="tp_main-container">
             <div className="tp_title">Translate {isLoading() && '......'}</div>
             {notiText() && <div class="tp_notification">{notiText()}</div>}
@@ -135,7 +120,6 @@ const App = () => {
 const rootId = 'translate-plugin'
 const createRoot = () => {
   const root = document.body.appendChild(document.createElement('div'))
-  console.log('create', root)
   root.setAttribute('id', rootId)
   return root
 }
