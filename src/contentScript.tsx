@@ -4,14 +4,12 @@ import { translate } from './utils/translate.ts';
 
 import './index.css';
 
+function isChinese(value) {
+  const reg = new RegExp("[\\u4E00-\\u9FFF]+", "g")
+  return reg.test(value)
+}
 const getLanguage = (value) => {
-  return /[a-zA-Z\s]+/.test(value) ? {
-    from: 'en',
-    to: 'zh'
-  } : {
-      from: 'zh',
-      to: 'en'
-    }
+  return isChinese(value) ? { from: 'zh', to: 'en' } : { from: 'en', to: 'zh' }
 }
 
 const App = () => {
@@ -55,12 +53,17 @@ const App = () => {
   }
 
   const onResultInputTap = () => {
-    resultElement.select()
+    const temp = document.body.appendChild(document.createElement('input'))
+    temp.style.opacity = '0'
+    temp.value = resultElement.value
+    temp.select()
     document.execCommand('copy')
+    setTimeout(() => document.body.removeChild(temp))
+
     setNotiText('Already copied!')
     setTimeout(() => {
       setNotiText('')
-    }, 1000)
+    }, 1500)
   }
 
   const showWithFocused = () => {
@@ -91,7 +94,7 @@ const App = () => {
           {/* <iframe src="https://www.iciba.com" /> */}
           <div onClick={onInnerContainerTap} class="tp_main-container">
             <div className="tp_title">Translate {isLoading() && '......'}</div>
-            {notiText() && <div class="tp_notification">{notiText()}</div>}
+            <div classList={{ tp_notification: true, ['tp_notification-visible']: Boolean(notiText()) }}>{notiText()}</div>
             <div className="tp_translate-item">
               <div className="tp_sub-title">Enter</div>
               <textarea ref={inputElement} onInput={onInputChange} class="tp_input-area"></textarea>

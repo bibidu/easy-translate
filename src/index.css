@@ -1,3 +1,6 @@
+.tp_full-container > * {
+  font-family: Google Sans !important;
+}
 .tp_full-container {
   position: fixed;
   top: 0;
@@ -10,6 +13,7 @@
 }
 .tp_side-btn {
   position: fixed;
+  background-color: #fff;
   cursor: pointer;
   z-index: 99999;
   top: 0;
@@ -17,7 +21,7 @@
   width: 45px;
   height: 25px;
   border-radius: 30px 0 0 30px;
-  box-shadow: -1px 0px 6px 2px #4e76ea;
+  box-shadow: -1px 0px 6px 2px #8f95a5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +30,6 @@
   color: #4e76ea;
 }
 .tp_container {
-  font-family: PingFang SC;
   position: fixed;
   background: #fff;
   z-index: 99999;
@@ -79,6 +82,7 @@ iframe {
   font-weight: 700;
 }
 .tp_input-area {
+  font-family: Google Sans !important;
   border-radius: 0px;
   border: 1px solid rgb(219, 219, 219);
   margin: 0px;
@@ -93,11 +97,17 @@ iframe {
   letter-spacing: 0.1px;
 }
 .tp_notification {
-  color: #4db1f4;
+  height: 40px;
+  box-sizing: border-box;
+  border: none;
+  color: transparent;
   font-weight: bold;
   padding: 4px 10px;
-  border: 1px dashed #4db1f4;
   border-radius: 4px;
   text-align: center;
   margin: 0 auto;
+}
+.tp_notification-visible {
+  color: #4db1f4;
+  border: 1px dashed #4db1f4;
 }

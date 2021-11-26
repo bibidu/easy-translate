@@ -4,32 +4,42 @@ import fetch from "fetch-jsonp";
 const APPID = "20180427000151021";
 const APP_KEY = "erZo2RNV0l6uto96zCQ5";
 
-function createGlobalJSONP(namespace) {
+function createGlobalJSONP(namespace, requestId) {
   const script = document.createElement("script");
-  script.setAttribute("id", "dxz");
+  script.setAttribute("id", "_translate_jsonp_");
 
   script.textContent = `function ${namespace}(response) {
-    const script = document.querySelector('#dxz')
-    script.setAttribute('data-value', JSON.stringify(response))
+    window.postMessage(
+      {
+        direction: "from-page-script",
+        message: JSON.stringify(response),
+      },
+      "*"
+    );
   }`;
   document.getElementsByTagName("head")[0].appendChild(script);
 
   return new Promise((resolve) => {
-    let time = 0;
-    let interval = setInterval(() => {
-      const script = document.querySelector("#dxz") as unknown as {
-        dataset: { value: string };
-      };
-      if (time++ > 15) {
-        clearInterval(interval);
-        return resolve({});
+    window.addEventListener("message", (event) => {
+      if (
+        event.source == window &&
+        event.data?.direction == "from-page-script"
+      ) {
+        resolve({
+          requestId,
+          body: JSON.parse(event.data.message),
+        });
       }
-      if (script.dataset.value) {
-        clearInterval(interval);
-        return resolve(JSON.parse(script.dataset.value));
-      }
-    }, 200);
+    });
   });
+}
+
+let requestId;
+function createRequestId() {
+  return (requestId = Math.random().toString(36).slice(3));
+}
+function getRequestId() {
+  return requestId;
 }
 
 export async function translate(query = "触发器", from = "zh", to = "en") {
@@ -45,7 +55,6 @@ export async function translate(query = "触发器", from = "zh", to = "en") {
     to: to,
     sign: sign,
   };
-  console.log("fetch", fetch);
   const params = Object.entries(requestParams)
     .map(([k, v]) => `${k}=${v}`)
     .join("&");
@@ -55,12 +64,20 @@ export async function translate(query = "触发器", from = "zh", to = "en") {
   fetch("https://api.fanyi.baidu.com/api/trans/vip/translate?" + params, {
     jsonpCallbackFunction: namespace,
   });
-  const { trans_result: result } = (await createGlobalJSONP(namespace)) as {
-    trans_result?: { dst: string }[];
+  const id = createRequestId();
+  const {
+    requestId,
+    body: { trans_result: result },
+  } = (await createGlobalJSONP(namespace, id)) as {
+    requestId: string;
+    body: {
+      trans_result?: { dst: string }[];
+    };
   };
-  if (result) {
+
+  if (requestId === getRequestId() && result) {
     return result.map(({ dst }) => dst).join(";\n");
   }
 
-  return "_no result_";
+  return "....";
 }

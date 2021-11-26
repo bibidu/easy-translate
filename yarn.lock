@@ -279,6 +279,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rollup/plugin-alias@^3.1.8":
+  version "3.1.8"
+  resolved "https://registry.npmmirror.com/@rollup/plugin-alias/download/@rollup/plugin-alias-3.1.8.tgz#645fd84659e08d3d1b059408fcdf69c1dd435a6b"
+  integrity sha1-ZF/YRlngjT0bBZQI/N9pwd1DWms=
+  dependencies:
+    slash "^3.0.0"
+
 "@rollup/plugin-babel@^5.3.0":
   version "5.3.0"
   resolved "https://registry.npmmirror.com/@rollup/plugin-babel/download/@rollup/plugin-babel-5.3.0.tgz#9cb1c5146ddd6a4968ad96f209c50c62f92f9879"
@@ -311,6 +318,14 @@
     deepmerge "^4.2.2"
     is-module "^1.0.0"
     resolve "^1.19.0"
+
+"@rollup/plugin-replace@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.nlark.com/@rollup/plugin-replace/download/@rollup/plugin-replace-3.0.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40rollup%2Fplugin-replace%2Fdownload%2F%40rollup%2Fplugin-replace-3.0.0.tgz#3a4c9665d4e7a4ce2c360cf021232784892f3fac"
+  integrity sha1-OkyWZdTnpM4sNgzwISMnhIkvP6w=
+  dependencies:
+    "@rollup/pluginutils" "^3.1.0"
+    magic-string "^0.25.7"
 
 "@rollup/pluginutils@^3.1.0":
   version "3.1.0"
@@ -870,6 +885,11 @@ fastq@^1.6.0:
   integrity sha1-YWdg+Ip1Jr38WWt8q4wYk4w2uYw=
   dependencies:
     reusify "^1.0.4"
+
+fetch-jsonp@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.nlark.com/fetch-jsonp/download/fetch-jsonp-1.2.1.tgz#a3ea630a992ae594cfbf5676e7f5fe4d2f8f03aa"
+  integrity sha1-o+pjCpkq5ZTPv1Z25/X+TS+PA6o=
 
 fill-range@^7.0.1:
   version "7.0.1"
