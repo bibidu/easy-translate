@@ -10,6 +10,8 @@
   z-index: 99998;
   transition: transform 0.5s ease;
   transform: translateX(100%);
+  display: flex;
+  flex-direction: row-reverse;
 }
 .tp_side-btn {
   position: fixed;
@@ -30,12 +32,8 @@
   color: #4e76ea;
 }
 .tp_container {
-  position: fixed;
   background: #fff;
   z-index: 99999;
-  right: 0;
-  top: 0;
-  bottom: 0;
   width: 600px;
   box-shadow: 0px 0px 7px 2px #ddd;
   box-sizing: border-box;
