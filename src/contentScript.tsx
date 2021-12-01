@@ -67,11 +67,18 @@ const App = () => {
   }
 
   const showWithFocused = () => {
+    clearBodyScale()
     setContainerVisible(true)
     inputElement?.focus()
   }
 
+  const clearBodyScale = () => {
+    if (document.body.style.transform.includes('scale')) {
+      document.body.style.transform = ''
+    }
+  }
   onMount(() => {
+    clearBodyScale()
     inputElement?.focus()
     document.addEventListener('keydown', (event) => {
       console.log('doc', event)
