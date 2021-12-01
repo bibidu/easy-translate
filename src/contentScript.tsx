@@ -1,4 +1,4 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
 import { translate } from './utils/translate.ts';
 
@@ -48,8 +48,8 @@ const App = () => {
     }, 300)
   }
 
-  const onOuterContainerTap = () => {
-    setContainerVisible(false)
+  const onOuterContainerTap = (event) => {
+    // setContainerVisible(false)
   }
 
   const onResultInputTap = () => {
@@ -73,7 +73,9 @@ const App = () => {
 
   onMount(() => {
     inputElement?.focus()
-    document.addEventListener('keydown', ({ metaKey, keyCode }) => {
+    document.addEventListener('keydown', (event) => {
+      console.log('doc', event)
+      const { metaKey, keyCode } = event
       const isPressCommand = metaKey
       const isPressSemicolon = keyCode === 186
       if (isPressCommand && isPressSemicolon) {
@@ -88,7 +90,19 @@ const App = () => {
 
   return (
     <>
-      {!containerVisible() && <div onClick={showWithFocused} class="tp_side-btn">译</div>}
+      <Show when={!containerVisible()}>
+        {() => (
+          <div
+            onClick={showWithFocused}
+            class="tp_side-btn"
+          >译</div>
+        )}
+      </Show>
+      <Show when={containerVisible()}>
+        {() => (
+          <div className="layer"></div>
+        )}
+      </Show>
       <div classList={{ 'tp_full-container': true, ['tp_container-visible']: containerVisible() }} onClick={onOuterContainerTap}>
         <div class="tp_container" ref={container}>
           {/* <iframe src="https://www.iciba.com" /> */}

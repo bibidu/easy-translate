@@ -67,16 +67,18 @@ export async function translate(query = "触发器", from = "zh", to = "en") {
   const id = createRequestId();
   const {
     requestId,
-    body: { trans_result: result },
+    body: { trans_result: result, error_msg: errorMsg },
   } = (await createGlobalJSONP(namespace, id)) as {
     requestId: string;
     body: {
       trans_result?: { dst: string }[];
+      error_msg?: string;
     };
   };
 
-  if (requestId === getRequestId() && result) {
-    return result.map(({ dst }) => dst).join(";\n");
+  if (requestId === getRequestId()) {
+    if (errorMsg) return `[${errorMsg}]`
+    if (result) return result.map(({ dst }) => dst).join(";\n");
   }
 
   return "....";
