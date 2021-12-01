@@ -54,7 +54,7 @@ const App = () => {
 
   const onResultInputTap = () => {
     const temp = document.body.appendChild(document.createElement('input'))
-    temp.style.opacity = '0'
+    temp.style.display = 'none'
     temp.value = resultElement.value
     temp.select()
     document.execCommand('copy')
@@ -63,7 +63,7 @@ const App = () => {
     setNotiText('Already copied!')
     setTimeout(() => {
       setNotiText('')
-    }, 1500)
+    }, 2000)
   }
 
   const showWithFocused = () => {
@@ -103,19 +103,47 @@ const App = () => {
           <div className="layer"></div>
         )}
       </Show>
-      <div classList={{ 'tp_full-container': true, ['tp_container-visible']: containerVisible() }} onClick={onOuterContainerTap}>
+      <div
+        classList={{
+          'tp_full-container': true,
+          ['tp_container-visible']: containerVisible()
+        }}
+        onClick={onOuterContainerTap}
+      >
         <div class="tp_container" ref={container}>
           {/* <iframe src="https://www.iciba.com" /> */}
-          <div onClick={onInnerContainerTap} class="tp_main-container">
+          <div
+            onClick={onInnerContainerTap}
+            class="tp_main-container"
+          >
             <div className="tp_title">Translate {isLoading() && '......'}</div>
-            <div classList={{ tp_notification: true, ['tp_notification-visible']: Boolean(notiText()) }}>{notiText()}</div>
+            <div
+              classList={
+                {
+                  tp_notification: true,
+                  ['tp_notification-visible']: Boolean(notiText())
+                }
+              }>
+              {notiText()}
+            </div>
             <div className="tp_translate-item">
               <div className="tp_sub-title">Enter</div>
-              <textarea ref={inputElement} onInput={onInputChange} class="tp_input-area"></textarea>
+              <textarea
+                ref={inputElement}
+                onInput={onInputChange}
+                class="tp_input-area"
+              />
             </div>
             <div className="tp_translate-item">
               <div className="tp_sub-title">Result</div>
-              <textarea ref={resultElement} onClick={onResultInputTap} readOnly value={transResult()} style="font-size:15px;cursor:auto;" class="tp_input-area"></textarea>
+              <textarea
+                ref={resultElement}
+                onClick={onResultInputTap}
+                readOnly
+                value={transResult()}
+                style="font-size:15px;cursor:auto;"
+                class="tp_input-area"
+              />
             </div>
           </div>
           <div class="tp_close-button" onClick={onCloseButtonTap}>
